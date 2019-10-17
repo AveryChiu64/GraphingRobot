@@ -44,7 +44,7 @@ polynomialDegree(degree);
 
 string polynomialDegree(int degree) {
 	int coefficients[degree];
-	for(int countDegree=0;countDegree<degree<countDegree++){//accept each coefficients
+	for(int countDegree=0;countDegree<degree;countDegree++){//accept each coefficients
 	cin >> coefficients[countDegree];
 	}
 
