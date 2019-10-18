@@ -9,8 +9,11 @@ on either a whiteboard or a piece of paper.
 #include <cstdlib>
 #include <cmath>
 #include <iomanip>
-
+//function prototypes
+void polynomial();
+void polynomialDegree(int degree);
 using namespace std;
+
 
 int main() {//Main
 	int userInput=0;
@@ -27,26 +30,44 @@ int main() {//Main
 	cout <<"3. Trigonometric function" << endl;
 	cout <<"4. Logarithmic function" << endl;
 	cout <<"5. Exponential function" << endl;
-	}while(userInput<1 && userInput > 5);
+	cin >> userInput;
+	}while(userInput < 1 || userInput > 5);
 	
+	if(userInput==1)
+	polynomial();
+
+	system("PAUSE");
+	return 0;
 }
 
 //Proccesses a polynomial
-bool polynomial() {
+void polynomial() {
 	int degree=0;
-cout <<" What degree would you like your polynomial to be?" << endl;
+cout <<" What degree would you like your function to be?" << endl;
+do{
 cout <<" Please enter a number between 1 and 10 inclusive?" << endl;
 cin >> degree;
-cout <<" You have chosen a " << degree << "funtion" endl;
-//Calls the polynomial degree funtion to process the funtion
+}while(degree < 0 || degree > 10 );
+cout <<" You have chosen a " << degree << "function" << endl;
+//Calls the polynomialDegree function to process the polynomial
 polynomialDegree(degree);
 }
 
-string polynomialDegree(int degree) {
+void polynomialDegree(int degree) {
 	int coefficients[degree];
+	int constant=0;
+
 	for(int countDegree=0;countDegree<degree;countDegree++){//accept each coefficients
+	cout << "Please enter the coefficient for the x value of degree " << countDegree << endl;
 	cin >> coefficients[countDegree];
 	}
+	cout <<"Please enter the constant value c" << endl;
+	cin >> constant;
+
+	cout <<"Your polynomial is ";
+	for(int countDegree=degree-1;countDegree>=0;countDegree--)
+	cout << coefficients[countDegree] << "x^ + " << countDegree;
+	cout << constant << endl;
 
 }
 
