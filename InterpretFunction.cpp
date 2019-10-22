@@ -24,6 +24,7 @@ void processPolynomial(int* coefficients, int constant,int degree);
 void processRational(int* coefficientsNumerator, int degreeNumerator, 
 	int constantNumerator, int* coefficientsDenominator, 
 	int degreeDenominator, int constantDenominator);
+void trigonometric();
 	
 using namespace std;
 
@@ -66,7 +67,7 @@ int userInput=0;
 	processPolynomial(coefficients,degree,polynomialDegree(coefficients, degree));
 	}
 	
-	if(userInput==2) {
+	else if(userInput==2) {
 	//rational function is in the form of f(x)/g(x)
 	//Find degree of f(x)
 	cout <<"Please enter the information for the numerator of the rational function" << endl;
@@ -82,6 +83,9 @@ int userInput=0;
 	
 	processRational(coefficientsNumerator, degreeNumerator, constantNumerator, 
 		coefficientsDenominator,degreeDenominator,constantDenominator);
+	}
+	else if(userInput==3) {
+		trigonometric();
 	}
 }
 
@@ -192,5 +196,17 @@ void processRational(int* coefficientsNumerator, int degreeNumerator,
 	}
 	fout.close();
 	cout <<"The coordinates have been placed into the file 'roboCoords.txt' " << endl;
+}
+
+void trigonometric () {
+	int choice=0, coefficient=0, innerCoefficients=0, constant=0;
+	cout <<"Please choose a trigonometric function" << endl;
+	cout <<"1. sin" << endl;
+	cout <<"2. cos" << endl;
+	cout <<"3. tan" << endl;
+	cout <<"4. arcsin" << endl;
+	cout <<"5. arccos" << endl;
+	cout <<"6. arctan" << endl;
+	
 }
 
