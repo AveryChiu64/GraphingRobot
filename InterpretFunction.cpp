@@ -21,9 +21,9 @@ void getFunction();
 int degreeInput();
 int polynomialDegree(int* coefficients, int degree);
 void processPolynomial(int* coefficients, int constant,int degree);
-void processRational(int* coefficients_numerator, int degree_numerator, 
-	int constant_numerator, int* coefficients_denominator, 
-	int degree_denominator, int constant_denominator);
+void processRational(int* coefficientsNumerator, int degreeNumerator, 
+	int constantNumerator, int* coefficientsDenominator, 
+	int degreeDenominator, int constantDenominator);
 	
 using namespace std;
 
@@ -69,17 +69,19 @@ int userInput=0;
 	if(userInput==2) {
 	//rational function is in the form of f(x)/g(x)
 	//Find degree of f(x)
-	int degree_numerator=degreeInput();
-	int coefficients_numerator[degree_numerator];
-	int constant_numerator = polynomialDegree(coefficients_numerator,degree_numerator);
+	cout <<"Please enter the information for the numerator of the rational function" << endl;
+	int degreeNumerator=degreeInput();
+	int coefficientsNumerator[degreeNumerator];
+	int constantNumerator = polynomialDegree(coefficientsNumerator,degreeNumerator);
 	
 	//Find degree of g(x)
-	int degree_denominator=degreeInput();
-	int coefficients_denominator[degree_denominator];
-	int constant_denominator = polynomialDegree(coefficients_denominator,degree_denominator);
+	cout <<"Please enter the information for the denominator of the rational function" << endl;
+	int degreeDenominator=degreeInput();
+	int coefficientsDenominator[degreeDenominator];
+	int constantDenominator = polynomialDegree(coefficientsDenominator,degreeDenominator);
 	
-	processRational(coefficients_numerator, degree_numerator, constant_numerator, 
-		coefficients_denominator,degree_denominator,constant_denominator);
+	processRational(coefficientsNumerator, degreeNumerator, constantNumerator, 
+		coefficientsDenominator,degreeDenominator,constantDenominator);
 	}
 }
 
@@ -132,6 +134,7 @@ int polynomialDegree(int* coefficients, int degree) {
 return constant;
 }
 
+//Outputs points of the polynomial to the file 
 void processPolynomial(int* coefficients,int degree, int constant) {
 	ofstream fout("roboCoords.txt");
 	int x=-10;
@@ -152,37 +155,38 @@ void processPolynomial(int* coefficients,int degree, int constant) {
 	
 }
 
-void processRational(int* coefficients_numerator, int degree_numerator, 
-	int constant_numerator, int* coefficients_denominator, 
-	int degree_denominator, int constant_denominator){
+//Outputs points of the rational function to the file 
+void processRational(int* coefficientsNumerator, int degreeNumerator, 
+	int constantNumerator, int* coefficientsDenominator, 
+	int degreeDenominator, int constantDenominator){
 		
 	ofstream fout("roboCoords.txt");
 	int x=-10;
-	int y_denominator=0;
-	int y_numerator=0;
+	int yDenominator=0;
+	int yNumerator=0;
 	double y=0;
 	
 	//Goes through 20 x values and finds their respective y value
 	for(x=-10; x <= 10 ; x++) {
 		//Resets the y value 
-		y_denominator=0;
-		y_numerator=0;
+		yDenominator=0;
+		yNumerator=0;
 		y=0;
 		
 		//Gets the y value in the numerator of f(x)
-		for(int poly=0;poly<degree_numerator;poly++) {
-		y_numerator+=(coefficients_numerator[poly] * pow(x,poly+1)); 
+		for(int poly=0;poly<degreeNumerator;poly++) {
+		yNumerator+=(coefficientsNumerator[poly] * pow(x,poly+1)); 
 		}
-		y_numerator+=constant_numerator; 
+		yNumerator+=constantNumerator; 
 		
 		//Gets the y value in the denominator of g(x)
-		for(int poly=0;poly<degree_denominator;poly++) {
-		y_denominator+=(coefficients_denominator[poly] * pow(x,poly+1)); 
+		for(int poly=0;poly<degreeDenominator;poly++) {
+		yDenominator+=(coefficientsDenominator[poly] * pow(x,poly+1)); 
 		}
-		y_denominator+=constant_denominator; 
+		yDenominator+=constantDenominator; 
 		
 		//Gets the y value using f(x)/g(x)
-		y = (double)y_numerator / y_denominator;
+		y = (double)yNumerator / yDenominator;
 		
 	fout << fixed << setprecision(4) << x << " " << y << endl; // write the coordinate to the the file for the robot 
 	}
