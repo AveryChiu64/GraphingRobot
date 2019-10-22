@@ -21,7 +21,10 @@ void getFunction();
 int degreeInput();
 int polynomialDegree(int* coefficients, int degree);
 void processPolynomial(int* coefficients, int constant,int degree);
-
+void processRational(int* coefficients_numerator, int degree_numerator, 
+	int constant_numerator, int* coefficients_denominator, 
+	int degree_denominator, int constant_denominator);
+	
 using namespace std;
 
 //main, calls the other functions
@@ -48,8 +51,12 @@ int userInput=0;
 	cout <<"3. Trigonometric function" << endl;
 	cout <<"4. Logarithmic function" << endl;
 	cout <<"5. Exponential function" << endl;
+	
+	//following are not functions, but can still be done by graphing calculator
+	cout <<"6. Circle and Elipse" << endl;
+	
 	cin >> userInput;
-	}while(userInput < 1 || userInput > 5);
+	}while(userInput < 1 || userInput > 6);
 	
 	//checks the option the user entered
 	if(userInput==1) {
@@ -57,6 +64,22 @@ int userInput=0;
 	int degree=degreeInput();
 	int coefficients[degree];
 	processPolynomial(coefficients,degree,polynomialDegree(coefficients, degree));
+	}
+	
+	if(userInput==2) {
+	//rational function is in the form of f(x)/g(x)
+	//Find degree of f(x)
+	int degree_numerator=degreeInput();
+	int coefficients_numerator[degree_numerator];
+	int constant_numerator = polynomialDegree(coefficients_numerator,degree_numerator);
+	
+	//Find degree of g(x)
+	int degree_denominator=degreeInput();
+	int coefficients_denominator[degree_denominator];
+	int constant_denominator = polynomialDegree(coefficients_denominator,degree_denominator);
+	
+	processRational(coefficients_numerator, degree_numerator, constant_numerator, 
+		coefficients_denominator,degree_denominator,constant_denominator);
 	}
 }
 
@@ -127,5 +150,43 @@ void processPolynomial(int* coefficients,int degree, int constant) {
 	fout.close();
 	cout <<"The coordinates have been placed into the file 'roboCoords.txt' " << endl;
 	
+}
+
+void processRational(int* coefficients_numerator, int degree_numerator, 
+	int constant_numerator, int* coefficients_denominator, 
+	int degree_denominator, int constant_denominator){
+		
+	ofstream fout("roboCoords.txt");
+	int x=-10;
+	int y_denominator=0;
+	int y_numerator=0;
+	double y=0;
+	
+	//Goes through 20 x values and finds their respective y value
+	for(x=-10; x <= 10 ; x++) {
+		//Resets the y value 
+		y_denominator=0;
+		y_numerator=0;
+		y=0;
+		
+		//Gets the y value in the numerator of f(x)
+		for(int poly=0;poly<degree_numerator;poly++) {
+		y_numerator+=(coefficients_numerator[poly] * pow(x,poly+1)); 
+		}
+		y_numerator+=constant_numerator; 
+		
+		//Gets the y value in the denominator of g(x)
+		for(int poly=0;poly<degree_denominator;poly++) {
+		y_denominator+=(coefficients_denominator[poly] * pow(x,poly+1)); 
+		}
+		y_denominator+=constant_denominator; 
+		
+		//Gets the y value using f(x)/g(x)
+		y = (double)y_numerator / y_denominator;
+		
+	fout << fixed << setprecision(4) << x << " " << y << endl; // write the coordinate to the the file for the robot 
+	}
+	fout.close();
+	cout <<"The coordinates have been placed into the file 'roboCoords.txt' " << endl;
 }
 
