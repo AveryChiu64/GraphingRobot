@@ -25,6 +25,7 @@ void processRational(int* coefficientsNumerator, int degreeNumerator,
 	int constantNumerator, int* coefficientsDenominator, 
 	int degreeDenominator, int constantDenominator);
 void trigonometric();
+bool wantFunctionOrNah();
 	
 using namespace std;
 
@@ -129,12 +130,7 @@ int polynomialDegree(int* coefficients, int degree) {
 	cout << constant << endl;
 
 	//Makes sure the user likes the polynomial
-	cout <<"Are you sure you want these coefficients?" << endl;
-	cout <<"Please pick an option" << endl;
-	cout <<"0. Yes" << endl;
-	cout <<"1. No" << endl;
-	cin >> want;
-	}while(want);
+	}while(wantFunctionOrNah());
 return constant;
 }
 
@@ -199,7 +195,8 @@ void processRational(int* coefficientsNumerator, int degreeNumerator,
 }
 
 void trigonometric () {
-	int choice=0, coefficient=0, innerCoefficients=0, constant=0;
+	int choice=0, coefficient=0, innerCoefficient=0, constant=0;
+	do {
 	cout <<"Please choose a trigonometric function" << endl;
 	cout <<"1. sin" << endl;
 	cout <<"2. cos" << endl;
@@ -207,6 +204,25 @@ void trigonometric () {
 	cout <<"4. arcsin" << endl;
 	cout <<"5. arccos" << endl;
 	cout <<"6. arctan" << endl;
+	cin >> choice; 
+	cout <<"Please enter the coefficient a y=af(x)" << endl;
+	cin >> coefficient;
+	cout <<"Please enter the inner coefficient k for y=f(kx)" << endl;
+	cin >> innerCoefficient;
+	cout <<"Please enter the constant c for y=f(x) + c " << endl;
+	}while(wantFunctionOrNah());
+	if(choice==1) {
 	
+	}
+}
+
+bool wantFunctionOrNah() {
+	int choice=0;
+	cout <<"Are you sure you want this function?" << endl;
+	cout <<"Please pick an option" << endl;
+	cout <<"1. Yes" << endl;
+	cout <<"2. No" << endl;
+	cin >> choice;
+return choice==2;
 }
 
