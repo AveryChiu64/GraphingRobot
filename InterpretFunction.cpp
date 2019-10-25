@@ -26,6 +26,7 @@ void processRational(int* coefficientsNumerator, int degreeNumerator,
 	int degreeDenominator, int constantDenominator);
 void trigonometric();
 bool wantFunctionOrNah();
+void trigFunctionOutput(int choice, int coefficient,int innerCoefficient,int constant);
 	
 using namespace std;
 
@@ -201,20 +202,27 @@ void trigonometric () {
 	cout <<"1. sin" << endl;
 	cout <<"2. cos" << endl;
 	cout <<"3. tan" << endl;
-	cout <<"4. arcsin" << endl;
-	cout <<"5. arccos" << endl;
-	cout <<"6. arctan" << endl;
+
 	cin >> choice; 
 	cout <<"Please enter the coefficient a y=af(x)" << endl;
 	cin >> coefficient;
 	cout <<"Please enter the inner coefficient k for y=f(kx)" << endl;
 	cin >> innerCoefficient;
 	cout <<"Please enter the constant c for y=f(x) + c " << endl;
-	}while(wantFunctionOrNah());
+	cin >> constant;
 	if(choice==1) {
+	cout << "y=" << coefficient << "sin(" << innerCoefficient << "x) + " << constant << endl;
+	}else if(choice==2) {
+	cout << "y=" << coefficient << "cos(" << innerCoefficient << "x) + " << constant << endl;
+	}else {
+	cout << "y=" << coefficient << "tan(" << innerCoefficient << "x) + " << constant << endl;
+	}
+
+	}while(wantFunctionOrNah());
+	trigFunctionOutput(choice,coefficient,innerCoefficient,constant);
 	
 	}
-}
+
 
 bool wantFunctionOrNah() {
 	int choice=0;
@@ -224,5 +232,24 @@ bool wantFunctionOrNah() {
 	cout <<"2. No" << endl;
 	cin >> choice;
 return choice==2;
-}
+}		
 
+//Outputs points of trig function a file 
+void trigFunctionOutput(int choice, int coefficient,int innerCoefficient,int constant){
+ofstream fout("roboCoords.txt");
+	for(int x=-10;x<=10;x++){
+		fout << x << " ";
+		if(choice==1){
+		fout << coefficient*sin(innerCoefficient*x) + constant;
+		}else if(choice==2) {
+		fout << coefficient*cos(innerCoefficient*x) + constant;
+		}else {
+		fout << coefficient*tan(innerCoefficient*x) + constant;	
+		}
+		fout << endl;
+		
+	}
+	fout.close();
+	cout <<"The coordinates have been placed into the file 'roboCoords.txt' " << endl;
+
+}
