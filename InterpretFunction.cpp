@@ -283,5 +283,30 @@ void processLogarithmic (){
 	cout <<"The coordinates have been placed into the file 'roboCoords.txt' " << endl;				
 }
 
+void processExponential () {
+	int base =0,coefficient =0, constant =0; 
+	int x=-10; 
+	double y=0; 
+	do {
+	cout << "Please enter the base of the exponential function" << endl; 
+	cin >> base;
+	cout << "Please enter the coefficient a for the fucntion  y=a(b)^x + c" << endl;
+	cin >> coefficient;   
+	cout << "Please enter the constant c for y= (b)^ x + c" << endl; 
+	cin >> constant; 
+	
+	cout << "The expoential function you have entered is "<< coefficient << "(" << base << ") ^ "; 
+	cout << "x + "<< constant << endl; 
+	} while (wantFunctionOrNah());
+	
+	ofstream fout("roboCoords.txt"); 
+	for(x=-10; x <= 10 ; x++) {
+		y=0; 
+		fout << x << " " << coefficient *(pow (base, x) ) + constant; 
+	}
+	fout.close(); 
+	cout <<"The coordinates have been placed into the file 'roboCoords.txt' " << endl;		
+} 
+
 
 
