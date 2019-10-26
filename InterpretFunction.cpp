@@ -30,6 +30,7 @@ void trigonometric();
 bool wantFunctionOrNah();
 void trigFunctionOutput(int choice, int coefficient,int innerCoefficient,int constant);
 void processLogarithmic();
+void processExponential(): 
 	
 using namespace std;
 
@@ -92,7 +93,9 @@ int userInput=0;
 	else if(userInput==4){
 		processLogarithmic();
 	}
-		
+	else if(userInput==5){ 
+		processExponential(); 
+	}		
 }
 
 //Allows the user to choose a degree of their function(s)
