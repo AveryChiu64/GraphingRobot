@@ -1,3 +1,5 @@
+//to do: add a function asking user if user want to start graphing. If not, exit the program or reselect the type of the function
+
 /*
 This progarm is created to accept basic functions and interpret them for a 
 LEGO EV3 Robot to plot out on a graph. This robot will draw the curve
@@ -27,6 +29,7 @@ void processRational(int* coefficientsNumerator, int degreeNumerator,
 void trigonometric();
 bool wantFunctionOrNah();
 void trigFunctionOutput(int choice, int coefficient,int innerCoefficient,int constant);
+void processLogarithmic();
 	
 using namespace std;
 
@@ -54,12 +57,8 @@ int userInput=0;
 	cout <<"3. Trigonometric function" << endl;
 	cout <<"4. Logarithmic function" << endl;
 	cout <<"5. Exponential function" << endl;
-	
-	//following are not functions, but can still be done by graphing calculator
-	cout <<"6. Circle and Elipse" << endl;
-	
 	cin >> userInput;
-	}while(userInput < 1 || userInput > 6);
+	}while(userInput < 1 || userInput > 5);
 	
 	//checks the option the user entered
 	if(userInput==1) {
@@ -89,6 +88,11 @@ int userInput=0;
 	else if(userInput==3) {
 		trigonometric();
 	}
+	
+	else if(userInput==4){
+		processLogarithmic();
+	}
+		
 }
 
 //Allows the user to choose a degree of their function(s)
@@ -253,3 +257,31 @@ ofstream fout("roboCoords.txt");
 	cout <<"The coordinates have been placed into the file 'roboCoords.txt' " << endl;
 
 }
+
+void processLogarithmic (){
+	int base = 0, coefficient = 0, innerCoefficient = 0, constant = 0;
+	do{
+		cout << "please enter the base of logarithmic function: ";
+		cin >> base;
+		cout << "please enter the coefficent a for y=af(x)";
+		cin >> coefficient;
+		cout << "please enter the inner coefficent k for y=f(kx)";
+		cin >> innerCoefficient;
+		cout <<"Please enter the constant c for y=f(x) + c ";
+		cin >> constant;
+		
+		//print the function
+		cout << "y = " << coefficient << "log" << base << "(" 
+			<< innerCoefficient << "x) + " << constant << endl;
+	}while(wantFunctionOrNah());
+	
+	ofstream fout("roboCoords.txt");
+	for(int x=1;x<=10;x++){
+		fout << x << " " << coefficient*(log(innerCoefficient*x)/log(base))+constant << endl;
+	}
+	fout.close();
+	cout <<"The coordinates have been placed into the file 'roboCoords.txt' " << endl;				
+}
+
+
+
