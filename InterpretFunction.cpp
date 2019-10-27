@@ -1,5 +1,3 @@
-//to do: add a function asking user if user want to start graphing. If not, exit the program or reselect the type of the function
-
 /*
 This progarm is created to accept basic functions and interpret them for a 
 LEGO EV3 Robot to plot out on a graph. This robot will draw the curve
@@ -30,7 +28,8 @@ void trigonometric();
 bool wantFunctionOrNah();
 void trigFunctionOutput(int choice, int coefficient,int innerCoefficient,int constant);
 void processLogarithmic();
-void processExponential(): 
+void processExponential(); 
+bool endOfProgram();
 	
 using namespace std;
 
@@ -50,14 +49,15 @@ int main() {
 void getFunction() {
 
 int userInput=0;
+do{
 	//Continually checks for proper input 
 	do {
 	cout <<"Please pick an option" << endl;
-	cout <<"1. Polynomial function" << endl;
-	cout <<"2. Rational function" << endl;
-	cout <<"3. Trigonometric function" << endl;
-	cout <<"4. Logarithmic function" << endl;
-	cout <<"5. Exponential function" << endl;
+	cout <<"\t1. Polynomial function" << endl;
+	cout <<"\t2. Rational function" << endl;
+	cout <<"\t3. Trigonometric function" << endl;
+	cout <<"\t4. Logarithmic function" << endl;
+	cout <<"\t5. Exponential function" << endl;
 	cin >> userInput;
 	}while(userInput < 1 || userInput > 5);
 	
@@ -96,7 +96,12 @@ int userInput=0;
 	else if(userInput==5){ 
 		processExponential(); 
 	}		
+}while(endOfProgram());
+cout << "Thank you for using the program" << endl;
+cout << "Remember to press any button on the robot for it to start graphing" << endl;
+
 }
+
 
 //Allows the user to choose a degree of their function(s)
 int degreeInput() {
@@ -206,9 +211,9 @@ void trigonometric () {
 	int choice=0, coefficient=0, innerCoefficient=0, constant=0;
 	do {
 	cout <<"Please choose a trigonometric function" << endl;
-	cout <<"1. sin" << endl;
-	cout <<"2. cos" << endl;
-	cout <<"3. tan" << endl;
+	cout <<"\t1. sin" << endl;
+	cout <<"\t2. cos" << endl;
+	cout <<"\t3. tan" << endl;
 
 	cin >> choice; 
 	cout <<"Please enter the coefficient a y=af(x)" << endl;
@@ -228,18 +233,7 @@ void trigonometric () {
 	}while(wantFunctionOrNah());
 	trigFunctionOutput(choice,coefficient,innerCoefficient,constant);
 	
-	}
-
-
-bool wantFunctionOrNah() {
-	int choice=0;
-	cout <<"Are you sure you want this function?" << endl;
-	cout <<"Please pick an option" << endl;
-	cout <<"1. Yes" << endl;
-	cout <<"2. No" << endl;
-	cin >> choice;
-return choice==2;
-}		
+	}	
 
 //Outputs points of trig function a file 
 void trigFunctionOutput(int choice, int coefficient,int innerCoefficient,int constant){
@@ -261,7 +255,8 @@ ofstream fout("roboCoords.txt");
 
 }
 
-void processLogarithmic (){
+//Procceess the logarithmic function
+void processLogarithmic(){
 	int base = 0, coefficient = 0, innerCoefficient = 0, constant = 0;
 	do{
 		cout << "please enter the base of logarithmic function: ";
@@ -286,7 +281,8 @@ void processLogarithmic (){
 	cout <<"The coordinates have been placed into the file 'roboCoords.txt' " << endl;				
 }
 
-void processExponential () {
+//Proccesses the exponential function and writes to the file 
+void processExponential() {
 	int base =0,coefficient =0, constant =0; 
 	int x=-10; 
 	double y=0; 
@@ -312,4 +308,28 @@ void processExponential () {
 } 
 
 
+//Checks if the user wants the function or not
+bool wantFunctionOrNah() {
+	int choice=0;
+	cout <<"Are you sure you want this function?" << endl;
+	cout <<"Please pick an option" << endl;
+	cout <<"\t1. Yes" << endl;
+	cout <<"\t2. No" << endl;
+	cin >> choice;
+return choice==2;
+}	
+
+//Checks if the user wants to end the program
+bool endOfProgram() {
+	int choice=0;
+	cout <<"Please upload the file to the robot" << endl;
+	cout <<"and press the button on the robot for it to start graphing" << endl;
+	cout <<"You may now either end the program and run the robot or" << endl;
+	cout <<"enter a new function for the robot which will overwrite the old one" << endl;
+	cout <<"Please pick an option" << endl;
+	cout <<"\t1.End program" << endl;
+	cout <<"\t2.Re-enter the function" << endl;
+	cin >> choice;
+	return choice==2;
+}
 
