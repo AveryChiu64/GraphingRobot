@@ -3,6 +3,11 @@ This progarm is created to accept basic functions and interpret them for a
 LEGO EV3 Robot to plot out on a graph. This robot will draw the curve
 on either a whiteboard or a piece of paper.
 
+Note:
+There will be many times the word function and constant may be used
+These terms do not refer to the programming side of things but rather
+the mathematical terms
+
 Sources:
 http://www.cplusplus.com/doc/tutorial/exceptions/
 http://www.cplusplus.com/doc/tutorial/arrays/
@@ -64,27 +69,27 @@ do{
 	//checks the option the user entered
 	if(userInput==1) {
 		//Find degree of the polynomial
-	int degree=degreeInput();
-	int coefficients[degree];
-	processPolynomial(coefficients,degree,polynomialDegree(coefficients, degree));
+	const int DEGREE=degreeInput();
+	int coefficients[DEGREE];
+	processPolynomial(coefficients,DEGREE,polynomialDegree(coefficients, DEGREE));
 	}
 	
 	else if(userInput==2) {
 	//rational function is in the form of f(x)/g(x)
 	//Find degree of f(x)
 	cout <<"Please enter the information for the numerator of the rational function" << endl;
-	int degreeNumerator=degreeInput();
-	int coefficientsNumerator[degreeNumerator];
-	int constantNumerator = polynomialDegree(coefficientsNumerator,degreeNumerator);
+	const int DEGREENUMERATOR=degreeInput();
+	int coefficientsNumerator[DEGREENUMERATOR];
+	int constantNumerator = polynomialDegree(coefficientsNumerator,DEGREENUMERATOR);
 	
 	//Find degree of g(x)
 	cout <<"Please enter the information for the denominator of the rational function" << endl;
-	int degreeDenominator=degreeInput();
-	int coefficientsDenominator[degreeDenominator];
-	int constantDenominator = polynomialDegree(coefficientsDenominator,degreeDenominator);
+	const int DEGREEDENOMINATOR=degreeInput();
+	int coefficientsDenominator[DEGREEDENOMINATOR];
+	int constantDenominator = polynomialDegree(coefficientsDenominator,DEGREEDENOMINATOR);
 	
-	processRational(coefficientsNumerator, degreeNumerator, constantNumerator, 
-		coefficientsDenominator,degreeDenominator,constantDenominator);
+	processRational(coefficientsNumerator, DEGREENUMERATOR, constantNumerator, 
+		coefficientsDenominator,DEGREEDENOMINATOR,constantDenominator);
 	}
 	else if(userInput==3) {
 		trigonometric();
