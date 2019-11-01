@@ -7,13 +7,12 @@
 
 //strucs
 typedef struct{
-    int x[20];
-    int y[20];
+    int x;
+    int y;
 }xyCoord;
 
 //Function Prototypes
-void readFile(xy* coords);
-
+void readFile(xyCoord* coords);
 
 //Controls calling of other functions 
 task main() {
