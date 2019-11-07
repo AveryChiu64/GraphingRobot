@@ -1,4 +1,4 @@
-<mxfile host="www.draw.io" modified="2019-11-07T19:27:40.319Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.87 Safari/537.36" etag="d2M6stTJPeFeSEp4HJIc" version="12.2.2" type="github" pages="1">
+<mxfile host="www.draw.io" modified="2019-11-07T19:28:37.463Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.87 Safari/537.36" etag="hd2rsuONms12yEUvij0V" version="12.2.2" type="github" pages="1">
   <diagram id="Ebnv-GKzkVtxkwz2iY0m" name="Page-1">
     <mxGraphModel dx="854" dy="387" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -191,6 +191,24 @@
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="750" y="650" as="sourcePoint"/>
             <mxPoint x="750" y="40" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1vBB7NY_RCICOXM90jw8-75" value="Output coordinates to a file&amp;nbsp;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="690" width="120" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="1vBB7NY_RCICOXM90jw8-76" value="" style="endArrow=classic;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="1vBB7NY_RCICOXM90jw8-58" target="1vBB7NY_RCICOXM90jw8-75">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="360" y="720" as="sourcePoint"/>
+            <mxPoint x="410" y="670" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1vBB7NY_RCICOXM90jw8-77" value="End" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="780" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="1vBB7NY_RCICOXM90jw8-79" value="" style="endArrow=classic;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="1vBB7NY_RCICOXM90jw8-75" target="1vBB7NY_RCICOXM90jw8-77">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="800" as="sourcePoint"/>
+            <mxPoint x="380" y="820.7106781186548" as="targetPoint"/>
           </mxGeometry>
         </mxCell>
       </root>
