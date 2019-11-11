@@ -214,13 +214,15 @@ void processRational(int* coefficientsNumerator, int degreeNumerator,
 
 void trigonometric () {
 	int choice=0, coefficient=0, innerCoefficient=0, constant=0;
+
 	do {
+		do{//continually checks to make sure the user enters proper input
 	cout <<"Please choose a trigonometric function" << endl;
 	cout <<"\t1. sin" << endl;
 	cout <<"\t2. cos" << endl;
 	cout <<"\t3. tan" << endl;
-
 	cin >> choice; 
+		}while(choice < 1 || choice > 3 );
 	cout <<"Please enter the coefficient a y=af(x)" << endl;
 	cin >> coefficient;
 	cout <<"Please enter the inner coefficient k for y=f(kx)" << endl;
