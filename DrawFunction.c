@@ -83,7 +83,7 @@ displayString(3,"");
 void graph(xyCoord* coords) {
     nMotorEncoder[motorA]=0;
  for(int numCoords=0;numCoords<NUM_OF_COORDS;numCoords++){
-  if(!undefined(coords[numCoords]);
+  if(!undefined(coords[numCoords]));
     moveToNextCoord(coords[numCoords]);
   
   else if(toInfinity(coords[numCoords],nMotorEncoder[motorA]))
