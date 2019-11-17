@@ -33,7 +33,7 @@ void startBot();
 void graph(xyCoord* coords);
 void moveToNextCoord(xyCoord coords);
 void driveToInfinity(xyCoord coords);
-bool undefined(xyCoord coords, int motorEncoderValue);
+bool undefined(xyCoord coords);
 bool toInfinity(xyCoord coords, int motorEncoderValue);
 void stop(int time);
 
@@ -83,7 +83,7 @@ displayString(3,"");
 void graph(xyCoord* coords) {
     nMotorEncoder[motorA]=0;
  for(int numCoords=0;numCoords<NUM_OF_COORDS;numCoords++){
-  if(undefined(coords[numCoords],nMotorEncoder[motorA])) 
+  if(!undefined(coords[numCoords]);
     moveToNextCoord(coords[numCoords]);
   
   else if(toInfinity(coords[numCoords],nMotorEncoder[motorA]))
@@ -92,9 +92,8 @@ void graph(xyCoord* coords) {
 }
 
 //Checks if a coordinate is vialble in range
-bool undefined(xyCoord coords, int motorEncoderValue) {
-return(coords.y<10 && motorEncoderValue < MAX_ARM_COUNTS && 
-coords.y>0 && motorEncoderValue > MIN_ARM_COUNTS);
+bool undefined(xyCoord coords) {
+return(coords.y>10 || coords.y<0);
 }
 
 //Checks if the next coordinate goes to infinity 
