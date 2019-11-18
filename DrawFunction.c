@@ -173,55 +173,58 @@ void rotatePenUpAndDown (int upOrDown){
 	while(timer[T2]<1250){}
 }
 
-//robot draws the cartesian plane *** this function can be simplifed using for loop 
+//robot draws the cartesian plane 
 void drawCartesianPlane (){
 	//rotate pen down when drawing cartesian plane
 	rotatePenUpAndDown (2);
 	
 	//variable
 	const int ARM_COUNT = 4*(180/(PI*2.75)); //half of the horizontal movement range
-	
-	
+		
 	nMotorEncoder[arm.port] = 0;
-	//draw +x axis 
-	setMotorSpeed(arm,20); 
-	while(nMotorEncoder[arm.port] < ARM_COUNT){}
-	setMotorSpeed(arm,0);
-	rotatePenUpAndDown(1); //pen up 
-	wait1Msec(5);
+	nMotorEncoder[paper.port] = 0;
 	
-	//draw -x axis
-	setMotorSpeed(arm,-30);
-	while(nMotorEncoder[arm.port] > 0) {} //back to the origin
-	setMotorSpeed(arm,0);
-	rotatePenUpAndDown(2); //pen down
-	setMotorSpeed(arm,-20);
-	while(nMotorEncoder[arm.port] > ARM_COUNT*-1){} 
-	setMotorSpeed(arm,0);
-	rotatePenUpAndDown(1); //pen up 
-	wait1Msec(5);
-	
-	//draw +y axis
-	setMotorSpeed(arm,30);
-	while(nMotorEncoder[arm.port] > 0){} //back to the origin 
-	setMotorSpeed(arm,0); 
-	rotatePenUpAndDown(2); //pen down 
-	setMotorSpeed(paper,20);
-	while(nMotorEncoder[paper.port] < ARM_COUNT){} //draw roughly 4cm
-	setMotorSpeed(paper,0);
-	rotatePenUpAndDown(1); //pen up 
-	wait1Msec(5);
-	
-	//draw -y axis 
-	setMotorSpeed(paper,-30);
-	while(nMotorEncoder[paper.port] > 0){} //back to the origin 
-	setMotorSpeed(paper,0); 
-	rotatePenUpAndDown(2); //pen down 
-	setMotorSpeed(paper,20);
-	while(nMotorEncoder[paper.port] < ARM_COUNT*-1){} //draw roughly 4cm
-	setMotorSpeed(paper,0);
-	rotatePenUpAndDown(1); //pen up 
-	wait1Msec(5);	
+	for(int count=0; count<2; count++){
+		if(count==0){//draw +x axis 			
+			setMotorSpeed(arm,20); 
+			while(nMotorEncoder[arm.port] < ARM_COUNT){}			
+		}		
+		else if(count==1){	//draw -x axis			
+			setMotorSpeed(arm,-30);
+			while(nMotorEncoder[arm.port] > 0) {} //back to the origin
+			setMotorSpeed(arm,0);
+			rotatePenUpAndDown(2); //pen down
+			setMotorSpeed(arm,-20);
+			while(nMotorEncoder[arm.port] > ARM_COUNT*-1){} 
+		}
+		setMotorSpeed(arm,0);
+		rotatePenUpAndDown(1); //pen up 
+		wait1Msec(5);
+	}
+
+	for(int count=0; count<2; count++){
+		if(count==0){
+			//draw +y axis
+			setMotorSpeed(arm,30);
+			while(nMotorEncoder[arm.port] > 0){} //back to the origin 
+			setMotorSpeed(arm,0); 
+			rotatePenUpAndDown(2); //pen down 
+			setMotorSpeed(paper,20);
+			while(nMotorEncoder[paper.port] < ARM_COUNT){} //draw roughly 4cm			
+		}
+		else if(count==1){
+			//draw -y axis 
+			setMotorSpeed(paper,-30);
+			while(nMotorEncoder[paper.port] > 0){} //back to the origin 
+			setMotorSpeed(paper,0); 
+			rotatePenUpAndDown(2); //pen down 
+			setMotorSpeed(paper,20);
+			while(nMotorEncoder[paper.port] < ARM_COUNT*-1){} //draw roughly 4cm	
+		}	
+		setMotorSpeed(paper,0);
+		rotatePenUpAndDown(1); //pen up 
+		wait1Msec(5);
+	}
 }
 
 //Function to graph everything
