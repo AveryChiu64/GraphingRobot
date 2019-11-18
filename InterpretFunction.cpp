@@ -41,7 +41,6 @@ using namespace std;
 //main, calls the other functions
 int main()
 {
-
 	//Main Menu
 	cout << "Welcome to the robot graphing calculator" << endl;
 	cout << "This program accepts basic functions and graphs the robot" << endl;
@@ -172,7 +171,7 @@ void processPolynomial(int *coefficients, int degree, int constant)
 	double x = -10;
 	double y = 0;
 	//Goes through 20 x values and finds their respective y value
-	for (x = -10; x <= 10; x += 0.5)
+	for (x = -10; x <= 10; x++)
 	{
 		//Resets the y value
 		y = 0;
@@ -201,7 +200,7 @@ void processRational(int *coefficientsNumerator, int degreeNumerator,
 	double y = 0;
 
 	//Goes through 20 x values and finds their respective y value
-	for (x = -10; x <= 10; x+=0.5)
+	for (x = -10; x <= 10; x++)
 	{
 		//Resets the y value
 		yDenominator = 0;
@@ -272,7 +271,7 @@ void trigonometric()
 void trigFunctionOutput(int choice, int coefficient, int innerCoefficient, int constant)
 {
 	ofstream fout("roboCoords.txt");
-	for (double x = -10; x <= 10; x += 0.5)
+	for (double x = -10; x <= 10; x++)
 	{
 		fout << x << " ";
 		if (choice == 1)
@@ -314,7 +313,7 @@ void processLogarithmic()
 	} while (wantFunctionOrNah());
 
 	ofstream fout("roboCoords.txt");
-	for (double x = -10; x <= 10; x += 0.5)
+	for (double x = -10; x <= 10; x++)
 	{
 		fout << x << " " << coefficient * (log(innerCoefficient * x) / log(base)) + constant << endl;
 	}
@@ -342,7 +341,7 @@ void processExponential()
 	} while (wantFunctionOrNah());
 
 	ofstream fout("roboCoords.txt");
-	for (x = -10; x <= 10; x += 0.5)
+	for (x = -10; x <= 10; x++)
 	{
 		y = 0;
 		fout << x << " " << coefficient * (pow(base, x)) + constant;

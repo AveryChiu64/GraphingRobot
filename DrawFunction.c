@@ -22,6 +22,7 @@
 
 //The side that has pen holder is the front side of the robot 
 //the starting position of the robot: pen down
+//the direction paper moves is x-axis, the direction pen moves is y-axis
 
 #include "PC_FileIO.c"
 
@@ -38,7 +39,7 @@ typedef struct{
 	int speed;
 }motorInfo;
 
-const int NUM_OF_COORDS=40;
+const int NUM_OF_COORDS=20;
 const int MAX_ARM_COUNTS=9*(180/(PI*2.75)); //prevents arm from going off page
 //the max_arm_counts is 9 since the maximimum horiozntal movement of the arm wheel is 9cm 
 const int MIN_ARM_COUNTS=0;
@@ -52,7 +53,7 @@ void moveToOrigin();
 void drawCartesianPlane();
 void rotatePenUpAndDown (int upOrDown);
 void graph(xyCoord* coords);
-void moveToNextCoord(xyCoord coords);
+void moveToNextCoord(xyCoord coords, int yOld);
 void driveToInfinity(xyCoord coords);
 bool undefined(xyCoord coords);
 bool toInfinity(xyCoord coords, int motorEncoderValue);
@@ -109,7 +110,7 @@ void setMotorSpeed (motorInfo&m, int newSpeed){
 }
 
 //Reads the data from the file 
-void readFile(xyCoord* coords) {
+void readFile(xyCoord* coords){
     TFileHandle fin;
     
     //Check if file can open 
@@ -185,7 +186,7 @@ void drawCartesianPlane (){
 	nMotorEncoder[paper.port] = 0;
 	
 	for(int count=0; count<2; count++){
-		if(count==0){//draw +x axis 			
+		if(count==0){	//draw +x axis 			
 			setMotorSpeed(arm,20); 
 			while(nMotorEncoder[arm.port] < ARM_COUNT){}			
 		}		
@@ -203,8 +204,7 @@ void drawCartesianPlane (){
 	}
 
 	for(int count=0; count<2; count++){
-		if(count==0){
-			//draw +y axis
+		if(count==0){//draw +y axis			
 			setMotorSpeed(arm,30);
 			while(nMotorEncoder[arm.port] > 0){} //back to the origin 
 			setMotorSpeed(arm,0); 
@@ -212,8 +212,7 @@ void drawCartesianPlane (){
 			setMotorSpeed(paper,20);
 			while(nMotorEncoder[paper.port] < ARM_COUNT){} //draw roughly 4cm			
 		}
-		else if(count==1){
-			//draw -y axis 
+		else if(count==1){//draw -y axis			 
 			setMotorSpeed(paper,-30);
 			while(nMotorEncoder[paper.port] > 0){} //back to the origin 
 			setMotorSpeed(paper,0); 
@@ -230,17 +229,26 @@ void drawCartesianPlane (){
 //Function to graph everything
 void graph(xyCoord* coords) {
     nMotorEncoder[arm.port]=0;
- for(int numCoords=0;numCoords<NUM_OF_COORDS;numCoords++){
-  if(!undefined(coords[numCoords]));
-    moveToNextCoord(coords[numCoords]);
+	int yOld = 0; 
+	
+	//draw the coordinates in +x 
+	for(int numCoords=11;numCoords<NUM_OF_COORDS;numCoords++){
+		if(!undefined(coords[numCoords])){
+  			yOld = coords[numCoords-1].y;
+    		moveToNextCoord(coords[numCoords],yOld);
+		}
   
-  else if(toInfinity(coords[numCoords],nMotorEncoder[arm.port]))
-    driveToInfity(coords[numCoords]);
- }
+  		else if(toInfinity(coords[numCoords],nMotorEncoder[arm.port])){
+    		driveToInfity(coords[numCoords]);
+    		//exit the for loop when it goes to first coordinate that has y value out of range
+			numCoords = NUM_OF_COORDS; 
+    	}
+ 	}
+ 	//draw the coordinates in -x
 }
 
 //Checks if a coordinate is viable in range 
-bool undefined(xyCoord coords) {
+bool undefined(xyCoord coords){
 return(coords.y>10 || coords.y<0);
 }
 
@@ -251,7 +259,7 @@ coords.y<0 && motorEncoderValue > MIN_ARM_COUNTS);
 }
 
 //drive to next coordinates
-void moveToNextCoord(xyCoord coords){		
+void moveToNextCoord(xyCoord coords, int yOld){		
 }
 
 //drive to infinity 
