@@ -10,26 +10,44 @@
 //This also makes the calculations easier since it is 1:1 scale for the
 //actual graph itself 
 
+//since the movement range for the pen is 8cm horizontally only, 
+//it is 0.8cm between each x value. The y range is adjusted to 8cm as well 
+//to make the graph has a proportional view
+
 //Motor A is the motor that controls the movement of the arm
 //Motor D is the motor to control the movement of the paper slider
 //Motor B is the motor to control the pen rotation
+//sensor 1 is the touch sensor 
+//sensor 2 is the color sensor 
+
+//The side that has pen holder is the front side of the robot 
 
 #include "PC_FileIO.c"
 
 //strucs
+//xy coordinates
 typedef struct{
     int x;
     int y;
 }xyCoord;
 
+//motor speed
+typedef struct{
+	tMotor port;
+	int speed;
+}motorInfo;
+
 const int NUM_OF_COORDS=40;
-const int MAX_ARM_COUNTS=20*(180/(PI*2.75)); //prevents arm from going off page
+const int MAX_ARM_COUNTS=9*(180/(PI*2.75)); //prevents arm from going off page
+//the max_arm_counts is 9 since the maximimum horiozntal movement of the arm wheel is 9cm 
 const int MIN_ARM_COUNTS=0;
 
 
 //Function Prototypes
+void setMotorSpeed(motorInfo&m, int newSpeed);
 void readFile(xyCoord* coords);
-void startBot();
+void pressAndReleaseButton();
+void moveToOrigin();
 void graph(xyCoord* coords);
 void moveToNextCoord(xyCoord coords);
 void driveToInfinity(xyCoord coords);
@@ -39,19 +57,43 @@ void stop(int time);
 
 //Controls calling of other functions 
 task main() {
+	//naming motors
+	motorInfo.pen;
+	pen.port = motorB;
+	pen.speed = 0;
+	
+	motorInfo.paper;
+	paper.port = motorD;
+	paper.speed = 0;
+	
+	motorInfo.arm;
+	arm.port = motorA;
+	arm.speed = 0;
+	
+	//sensor type and sensor mode
+	SensorType[S1] = sensorEV3_Touch;
+	SensorType[S2] = sensorEV3_Color;	
+	wait1Msec(50);	
+	SensorMode[S2] = modeEV3Color_Color;
 
-
-//Start a timer to see how long it takes to graph
-timer[t1]=0;
-
-//Variables
- xyCoord coords[NUM_OF_COORDS] = {{0,0},{0,0}};
-
-readFile(coords);
-startBot();
-graph(coords);
-stop(timer[t1]);
+	//Start a timer to see how long it takes to graph
+	timer[t1]=0;
+	
+	//Variables
+	xyCoord coords[NUM_OF_COORDS] = {{0,0},{0,0}};
+	
+	readFile(coords);
+	displayString(3,"Please press the down button to start the robot");
+	pressAndReleaseButton();
+	graph(coords);
+	stop(timer[t1]);
 }//end of main
+
+//set robot speed
+void setMotorSpeed (motorInfo&m, int newSpeed){
+	m.speed = newSpeed;
+	motor[m.port] = m.speed;
+}
 
 //Reads the data from the file 
 void readFile(xyCoord* coords) {
@@ -72,26 +114,47 @@ void readFile(xyCoord* coords) {
 }
 
 //Waits for user to push button and release 
-void startBot(){
-displayString(3,"Please press the down button for the robot to start graphing");
+void pressAndReleaseButton(){
 while(!getButtonPress(buttonAny)){}
 while(getButtonPress(buttonAny)){}
 displayString(3,"");
 }
 
+//move the robot to the origin of the cartesian plane 
+void moveToOrigin(){
+	//move the robot arm to the RIGHT end
+	setMotorSpeed(arm,50);
+	nMotorEncoder[arm.port] = 0;
+	while(nMotorEncoder[arm.port] < MAX_ARM_COUNTS){}
+	
+	setMotorSpeed(arm,0);
+	wait1Msec(5);
+	
+	//move the robot arm to the CENTER of the horizontal graphing range
+	setMotorSpeed(arm,-30);
+	nMotorEncoder[arm.port] = 0; 
+	while(nMotorEncoder[arm.port] < MAX_ARM_COUNTS/2){}
+	
+	setMotorSpeed(arm,0);
+	
+	//slide the paper until it reaches the touch sensor 
+	setMotorSpeed(paper,50);
+	while()
+}
+
 //Function to graph everything
 void graph(xyCoord* coords) {
-    nMotorEncoder[motorA]=0;
+    nMotorEncoder[arm.port]=0;
  for(int numCoords=0;numCoords<NUM_OF_COORDS;numCoords++){
   if(!undefined(coords[numCoords]));
     moveToNextCoord(coords[numCoords]);
   
-  else if(toInfinity(coords[numCoords],nMotorEncoder[motorA]))
+  else if(toInfinity(coords[numCoords],nMotorEncoder[arm.port]))
     driveToInfity(coords[numCoords]);
  }
 }
 
-//Checks if a coordinate is vialble in range
+//Checks if a coordinate is viable in range 
 bool undefined(xyCoord coords) {
 return(coords.y>10 || coords.y<0);
 }
@@ -102,8 +165,22 @@ bool toInfinity(xyCoord coords, int motorEncoderValue) {
 coords.y<0 && motorEncoderValue > MIN_ARM_COUNTS);
 }
 
+//drive to next coordinates
+void moveToNextCoord(xyCoord coords){
+		
+}
+
+//drive to infinity 
+void driveToInfinity(xyCoord coords){
+	
+}
+
+//display message when the graph is finished 
 void stop(int time) {
-    motor[motorA]=motor[motorD]=0;
+    setMotorSpeed(arm,0);
+    setMotorSpeed(pen,0);
+    setMotorSpeed(paper,0);
     displayString(3, "Finished graphing");
     displayString(5,"The program ran for %d seconds",time);
 }
+
