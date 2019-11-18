@@ -11,7 +11,7 @@
 //actual graph itself 
 
 //since the movement range for the pen is 8cm horizontally only, 
-//it is 0.8cm between each x value. The y range is adjusted to 8cm as well 
+//it is 0.4cm between each x value. The y range is adjusted to 8cm as well 
 //to make the graph has a proportional view
 
 //Motor A is the motor that controls the movement of the arm
@@ -21,6 +21,7 @@
 //sensor 2 is the color sensor 
 
 //The side that has pen holder is the front side of the robot 
+//the starting position of the robot: pen down
 
 #include "PC_FileIO.c"
 
@@ -48,6 +49,8 @@ void setMotorSpeed(motorInfo&m, int newSpeed);
 void readFile(xyCoord* coords);
 void pressAndReleaseButton();
 void moveToOrigin();
+void drawCartesianPlane();
+void rotatePenUpAndDown (int upOrDown);
 void graph(xyCoord* coords);
 void moveToNextCoord(xyCoord coords);
 void driveToInfinity(xyCoord coords);
@@ -83,11 +86,20 @@ task main() {
 	//Variables
 	xyCoord coords[NUM_OF_COORDS] = {{0,0},{0,0}};
 	
+	//function calls
+	//starting robot 
 	readFile(coords);
 	displayString(3,"Please press the down button to start the robot");
-	pressAndReleaseButton();
+	pressAndReleaseButton();	
+	moveToOrigin(); 
+	drawCartesianPlane();
+	
+	//actual graphing 
 	graph(coords);
+	
+	//ending robot 
 	stop(timer[t1]);
+	rotatePenUpAndDown(2); //rotate pen down as the ending position, get ready for the next grpah
 }//end of main
 
 //set robot speed
@@ -123,6 +135,8 @@ displayString(3,"");
 
 //move the robot to the origin of the cartesian plane 
 void moveToOrigin(){
+	//rotate pen up before moving the robot to the starting position 
+	rotatePenUpAndDown(1); 
 	//move the robot arm to the RIGHT end
 	setMotorSpeed(arm,50);
 	nMotorEncoder[arm.port] = 0;
@@ -134,17 +148,81 @@ void moveToOrigin(){
 	//move the robot arm to the CENTER of the horizontal graphing range
 	setMotorSpeed(arm,-30);
 	nMotorEncoder[arm.port] = 0; 
-	while(nMotorEncoder[arm.port] < MAX_ARM_COUNTS/2){}
-	
+	while(nMotorEncoder[arm.port] < MAX_ARM_COUNTS/2){}	
 	setMotorSpeed(arm,0);
 	
-	//slide the paper until it the touch sensor is pressed and released 
+	//slide the paper until it the touch sensor is pressed 
 	setMotorSpeed(paper,50);
 	while(SensorValue[S1]==0){}
-	while(SensorValue[S1]==1){}
 	setMotorSpeed(paper,0);
 }
 
+//rotate pen holder up and down 
+void rotatePenUpAndDown (int upOrDown){
+	//starts a timer to record the time taken to rotate the pen up and down
+	timer[T2] = 0; 	
+	//when the motor power is set to be 5, it takes 5 seconds to rotate a full cycle	 
+	//rotate pen up 45 degrees
+	if (upOrDown == 1){
+		setMotorSpeed(pen,5);
+	}
+	//rotate pen down 45 degrees
+	else if (upOrDown == 2){
+		setMotorSpeed(pen,-5);
+	}	
+	while(timer[T2]<1250){}
+}
+
+//robot draws the cartesian plane *** this function can be simplifed using for loop 
+void drawCartesianPlane (){
+	//rotate pen down when drawing cartesian plane
+	rotatePenUpAndDown (2);
+	
+	//variable
+	const int ARM_COUNT = 4*(180/(PI*2.75)); //half of the horizontal movement range
+	
+	
+	nMotorEncoder[arm.port] = 0;
+	//draw +x axis 
+	setMotorSpeed(arm,20); 
+	while(nMotorEncoder[arm.port] < ARM_COUNT){}
+	setMotorSpeed(arm,0);
+	rotatePenUpAndDown(1); //pen up 
+	wait1Msec(5);
+	
+	//draw -x axis
+	setMotorSpeed(arm,-30);
+	while(nMotorEncoder[arm.port] > 0) {} //back to the origin
+	setMotorSpeed(arm,0);
+	rotatePenUpAndDown(2); //pen down
+	setMotorSpeed(arm,-20);
+	while(nMotorEncoder[arm.port] > ARM_COUNT*-1){} 
+	setMotorSpeed(arm,0);
+	rotatePenUpAndDown(1); //pen up 
+	wait1Msec(5);
+	
+	//draw +y axis
+	setMotorSpeed(arm,30);
+	while(nMotorEncoder[arm.port] > 0){} //back to the origin 
+	setMotorSpeed(arm,0); 
+	rotatePenUpAndDown(2); //pen down 
+	setMotorSpeed(paper,20);
+	while(nMotorEncoder[paper.port] < ARM_COUNT){} //draw roughly 4cm
+	setMotorSpeed(paper,0);
+	rotatePenUpAndDown(1); //pen up 
+	wait1Msec(5);
+	
+	//draw -y axis 
+	setMotorSpeed(paper,-30);
+	while(nMotorEncoder[paper.port] > 0){} //back to the origin 
+	setMotorSpeed(paper,0); 
+	rotatePenUpAndDown(2); //pen down 
+	setMotorSpeed(paper,20);
+	while(nMotorEncoder[paper.port] < ARM_COUNT*-1){} //draw roughly 4cm
+	setMotorSpeed(paper,0);
+	rotatePenUpAndDown(1); //pen up 
+	wait1Msec(5);	
+}
 
 //Function to graph everything
 void graph(xyCoord* coords) {
@@ -170,13 +248,11 @@ coords.y<0 && motorEncoderValue > MIN_ARM_COUNTS);
 }
 
 //drive to next coordinates
-void moveToNextCoord(xyCoord coords){
-		
+void moveToNextCoord(xyCoord coords){		
 }
 
 //drive to infinity 
-void driveToInfinity(xyCoord coords){
-	
+void driveToInfinity(xyCoord coords){	
 }
 
 //display message when the graph is finished 
