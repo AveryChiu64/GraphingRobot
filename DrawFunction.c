@@ -75,6 +75,7 @@ task main() {
 	SensorType[S2] = sensorEV3_Color;	
 	wait1Msec(50);	
 	SensorMode[S2] = modeEV3Color_Color;
+	wait1Msec(50);
 
 	//Start a timer to see how long it takes to graph
 	timer[t1]=0;
@@ -137,10 +138,13 @@ void moveToOrigin(){
 	
 	setMotorSpeed(arm,0);
 	
-	//slide the paper until it reaches the touch sensor 
+	//slide the paper until it the touch sensor is pressed and released 
 	setMotorSpeed(paper,50);
-	while()
+	while(SensorValue[S1]==0){}
+	while(SensorValue[S1]==1){}
+	setMotorSpeed(paper,0);
 }
+
 
 //Function to graph everything
 void graph(xyCoord* coords) {
