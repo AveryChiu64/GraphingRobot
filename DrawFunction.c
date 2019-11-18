@@ -149,14 +149,13 @@ void moveToOrigin(){
 	//move the robot arm to the CENTER of the horizontal graphing range
 	setMotorSpeed(arm,-30);
 	nMotorEncoder[arm.port] = 0; 
-<<<<<<< HEAD
+
 	while(nMotorEncoder[arm.port] < MAX_ARM_COUNTS/2){}
 	
 	setMotorSpeed(arm ,0);
-=======
+
 	while(nMotorEncoder[arm.port] < MAX_ARM_COUNTS/2){}	
 	setMotorSpeed(arm,0);
->>>>>>> 0384cfadc02cdbdf8e40d1e6f1008f2012919468
 	
 	//slide the paper until it the touch sensor is pressed 
 	setMotorSpeed(paper,50);
