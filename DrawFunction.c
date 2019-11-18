@@ -82,7 +82,7 @@ task main() {
 	wait1Msec(50);
 
 	//Start a timer to see how long it takes to graph
-	timer[t1]=0;
+	time1[T1]=0;
 	
 	//Variables
 	xyCoord coords[NUM_OF_COORDS] = {{0,0},{0,0}};
@@ -139,7 +139,7 @@ void moveToOrigin(){
 	//rotate pen up before moving the robot to the starting position 
 	rotatePenUpAndDown(1); 
 	//move the robot arm to the RIGHT end
-	setMotorSpeed(arm,50);
+	setMotorSpeed(arm ,50);
 	nMotorEncoder[arm.port] = 0;
 	while(nMotorEncoder[arm.port] < MAX_ARM_COUNTS){}
 	
@@ -155,7 +155,7 @@ void moveToOrigin(){
 	setMotorSpeed(arm ,0);
 
 	while(nMotorEncoder[arm.port] < MAX_ARM_COUNTS/2){}	
-	setMotorSpeed(arm,0);
+	setMotorSpeed(arm ,0);
 	
 	//slide the paper until it the touch sensor is pressed 
 	setMotorSpeed(paper,50);
@@ -166,7 +166,7 @@ void moveToOrigin(){
 //rotate pen holder up and down 
 void rotatePenUpAndDown (int upOrDown){
 	//starts a timer to record the time taken to rotate the pen up and down
-	timer[T2] = 0; 	
+	time2[T2] = 0; 	
 	//when the motor power is set to be 5, it takes 5 seconds to rotate a full cycle	 
 	//rotate pen up 45 degrees
 	if (upOrDown == 1){
@@ -176,7 +176,7 @@ void rotatePenUpAndDown (int upOrDown){
 	else if (upOrDown == 2){
 		setMotorSpeed(pen,-5);
 	}	
-	while(timer[T2]<1250){}
+	while(time2[T2]<1250){}
 }
 
 //robot draws the cartesian plane 
@@ -268,8 +268,8 @@ coords.y<0 && motorEncoderValue > MIN_ARM_COUNTS);
 void moveToNextCoord(xyCoord coords ,int yOld){
 	// check what is the y-value for when x=0, and move to the position 
 	// rotate down the pen to start 
-	rotateUpAndDown(timer[T1],2); //down
-	while( time[T1] < 200)
+	rotateUpAndDown(time1[T1],2); //down
+	while( time1[T1] < 200)
 	{ 
 		setMotorSpeed (paper, 5.18711*coords.x); 
 		setMotorSpeed (arm , ((2(coords.y -yOld) + 0.4701) /0.4762));
@@ -279,19 +279,20 @@ void moveToNextCoord(xyCoord coords ,int yOld){
 	// the distance foe every y-value is (y-value new - y-value old)*0.4 cm 
 	// speed for the arm and the paper should be uniform 
 	
-	rotateUpAndDown(timer[T1],1); // up
-
+	rotateUpAndDown(time1[T1],1); // up
 }
 
 //drive to infinity 
 void driveToInfinity(xyCoord coords){	
+
+
 }
 
 //display message when the graph is finished 
 void stop(int time) {
-    setMotorSpeed(arm,0);
-    setMotorSpeed(pen,0);
-    setMotorSpeed(paper,0);
+    setMotorSpeed(arm ,0);
+    setMotorSpeed(pen ,0);
+    setMotorSpeed(paper ,0);
     displayString(3, "Finished graphing");
     displayString(5,"The program ran for %d seconds",time);
 }
