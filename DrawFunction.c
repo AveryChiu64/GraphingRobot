@@ -54,7 +54,7 @@ void drawCartesianPlane();
 void rotatePenUpAndDown (int upOrDown);
 void graph(xyCoord* coords);
 void moveToNextCoord(xyCoord coords, int yOld);
-void driveToInfinity(xyCoord coords);
+void driveToInfinity(xyCoord coords, int yOld);
 bool undefined(xyCoord coords);
 bool toInfinity(xyCoord coords, int motorEncoderValue);
 void stop(int time);
@@ -99,7 +99,7 @@ task main() {
 	graph(coords);
 	
 	//ending robot 
-	stop(timer[t1]);
+	stop(time1[t1]);
 	rotatePenUpAndDown(2); //rotate pen down as the ending position, get ready for the next grpah
 }//end of main
 
@@ -234,22 +234,51 @@ void drawCartesianPlane (){
 //Function to graph everything
 void graph(xyCoord* coords) {
     nMotorEncoder[arm.port]=0;
+    
+    //variables
 	int yOld = 0; 
+	int startPoint = 11;
+	int endPoint = NUM_OF_COORDS;
 	
+	rotatePenUpAndDown(2); //pen down
+	if(coords[0].x > 0){ //if log function 
+		startPoint = 1;
+		endPoint = 10;
+	}
 	//draw the coordinates in +x 
-	for(int numCoords=11;numCoords<NUM_OF_COORDS;numCoords++){
+	for(int numCoords=startPoint;numCoords<=endPoint;numCoords++){
+		yOld = coords[numCoords-1].y;
 		if(!undefined(coords[numCoords])){
-  			yOld = coords[numCoords-1].y;
     		moveToNextCoord(coords[numCoords],yOld);
 		}
   
   		else if(toInfinity(coords[numCoords],nMotorEncoder[arm.port])){
-    		driveToInfity(coords[numCoords]);
+    		driveToInfity(coords[numCoords],yOld);
     		//exit the for loop when it goes to first coordinate that has y value out of range
-			numCoords = NUM_OF_COORDS; 
+			numCoords = NUM_OF_COORDS+1; 
     	}
  	}
- 	//draw the coordinates in -x
+ 	
+ 	if(coords[0].x<=0){ //log function will not be included 
+	 	//return to origin before drawing the coordnates in -x
+	 	moveToOrigin();
+	 	
+	 	rotatePenUpAndDown(2); //pen down
+	 	//draw the coordinates in -x
+	 	for(int numCoords = 9;numCoords>=0;numCorrds--){
+	 		yOld = coords[numCoords+1].y;
+	 		if(!undefined(coords[numCoords])){
+	    		moveToNextCoord(coords[numCoords],yOld);
+			}
+			
+			else if(toInfinity(coords[numCoords],nMotorEncoder[arm.port])){			
+	    		driveToInfity(coords[numCoords],yOld);
+	    		//exit the for loop when it goes to first coordinate that has y value out of range
+				numCoords = -1; 
+	    	}
+	 	}
+	 	rotatePenUpAndDown(1); //pen up
+	}
 }
 
 //Checks if a coordinate is viable in range 
@@ -264,8 +293,7 @@ coords.y<0 && motorEncoderValue > MIN_ARM_COUNTS);
 }
 
 //drive to next coordinates
-
-void moveToNextCoord(xyCoord coords ,int yOld){
+void moveToNextCoord(xyCoord coords,int yOld){
 	// check what is the y-value for when x=0, and move to the position 
 	// rotate down the pen to start 
 	time2[T2] = 0;
@@ -277,12 +305,11 @@ void moveToNextCoord(xyCoord coords ,int yOld){
 	}
 	// the distance for every x-value is 0.4 cm 
 	// the distance foe every y-value is (y-value new - y-value old)*0.4 cm 
-	// speed for the arm and the paper should be uniform 
-	
+	// speed for the arm and the paper should be uniform 	
 }
 
 //drive to infinity 
-void driveToInfinity(xyCoord coords){	
+void driveToInfinity(xyCoord coords, int yOld){	
 	time2[T2] = 0; 
 	while (time2[T2] < 200) 
 	{ 
