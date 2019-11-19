@@ -57,7 +57,9 @@ void moveToNextCoord(xyCoord coords, int yOld);
 void driveToInfinity(xyCoord coords, int yOld);
 bool undefined(xyCoord coords);
 bool toInfinity(xyCoord coords, int motorEncoderValue);
+bool colorTest(); 
 void stop(int time);
+
 
 //Controls calling of other functions 
 task main() {
@@ -86,18 +88,20 @@ task main() {
 	
 	//Variables
 	xyCoord coords[NUM_OF_COORDS] = {{0,0},{0,0}};
-	
-	//function calls
-	//starting robot 
-	readFile(coords);
-	displayString(3,"Please press the down button to start the robot");
-	pressAndReleaseButton();	
-	moveToOrigin(); 
-	drawCartesianPlane();
-	
-	//actual graphing 
-	graph(coords);
-	
+
+	while(colorTest()){
+		//function call
+		//starting robot 
+		readFile(coords);
+		displayString(3,"Please press the down button to start the robot");
+		pressAndReleaseButton();	
+		moveToOrigin(); 
+		drawCartesianPlane();
+		
+		//actual graphing 
+		graph(coords);
+	}
+
 	//ending robot 
 	stop(time1[t1]);
 	rotatePenUpAndDown(2); //rotate pen down as the ending position, get ready for the next grpah
@@ -237,6 +241,7 @@ void graph(xyCoord* coords) {
     
     //variables
 	int yOld = 0; 
+	int xOld = 0; 
 	int startPoint = 11;
 	int endPoint = NUM_OF_COORDS;
 	
@@ -248,12 +253,13 @@ void graph(xyCoord* coords) {
 	//draw the coordinates in +x 
 	for(int numCoords=startPoint;numCoords<=endPoint;numCoords++){
 		yOld = coords[numCoords-1].y;
+		xOld = coords[numCoords-1].x; 
 		if(!undefined(coords[numCoords])){
     		moveToNextCoord(coords[numCoords],yOld);
 		}
   
   		else if(toInfinity(coords[numCoords],nMotorEncoder[arm.port])){
-    		driveToInfity(coords[numCoords],yOld);
+    		driveToInfinity(coords[numCoords],yOld, xOld);
     		//exit the for loop when it goes to first coordinate that has y value out of range
 			numCoords = NUM_OF_COORDS+1; 
     	}
@@ -267,12 +273,13 @@ void graph(xyCoord* coords) {
 	 	//draw the coordinates in -x
 	 	for(int numCoords = 9;numCoords>=0;numCorrds--){
 	 		yOld = coords[numCoords+1].y;
+	 		xOld = coords[numCoords+1}.x; 
 	 		if(!undefined(coords[numCoords])){
 	    		moveToNextCoord(coords[numCoords],yOld);
 			}
 			
 			else if(toInfinity(coords[numCoords],nMotorEncoder[arm.port])){			
-	    		driveToInfity(coords[numCoords],yOld);
+	    		driveToInfinity(coords[numCoords],yOld,xOld);
 	    		//exit the for loop when it goes to first coordinate that has y value out of range
 				numCoords = -1; 
 	    	}
@@ -297,25 +304,58 @@ void moveToNextCoord(xyCoord coords,int yOld){
 	// check what is the y-value for when x=0, and move to the position 
 	// rotate down the pen to start 
 	time2[T2] = 0;
+	// Draw connection between two points 
 	while( time2[T2] < 200)
 	{ 
 		setMotorSpeed (paper, 5.18711*coords.x); 
-		setMotorSpeed (arm , ((2(coords.y -yOld) + 0.4701) /0.4762));
+		setMotorSpeed (arm , ((2(fabs(coords.y -yOld)) + 0.4701) /0.4762));
 	
 	}
-	// the distance for every x-value is 0.4 cm 
-	// the distance foe every y-value is (y-value new - y-value old)*0.4 cm 
-	// speed for the arm and the paper should be uniform 	
+	// The distance for every x-value is 0.4 cm   
+	// The distance foe every y-value is (y-value new - y-value old)*0.4 cm 
+	// Speed for the arm and the paper should be uniform 	
 }
 
 //drive to infinity 
-void driveToInfinity(xyCoord coords, int yOld){	
+void driveToInfinity(xyCoord coords, int yOld, int xOld){	
+	
+	double m = 0, b = 0, xNew = 0, speedX = 0, speedY = 0; 
+	// Find a linear equation between two points 
+	// The out of range point and the point before it
+	m = (coords.x - xOld)/(coords.y - yOld) ; 
+	b = coords.y - m*coords.x; 
+	
+	// Find the corresponding x value when y = 8
+	// Calculate the proper speed for the arm and the paper to move
+	if (coords.y > 8)
+	{
+		xNew = (8-b)/m; 
+		speedX = (xNew - xOld)*0.4/0.2;
+		speedY = ((8-yOld) * speedX) /(xNew - xOld); 
+	}
+	
+	// Find the corresponding x value when y = -8
+	// Calculate the proper speed for the arm and the paper to move
+	if (coords.y < -8)
+	{
+		xNew = (-8-b)/m; 
+		speedX = (xNew - xOld)*0.4/0.2;
+		speedY = (fabs(-8-yOld) * speedX) /(xNew - xOld); 
+	}
+	
 	time2[T2] = 0; 
+	// Draw connection between two points  
 	while (time2[T2] < 200) 
 	{ 
-		setMotorSpeed (paper, 5.18711*coords.x); 
-		setMotorSpeed (arm, (
+		setMotorSpeed (arm , (speedY + 0.4701)/0.4762);
+		setMotorSpeed (paper , (speedX + 0.4701)/0.4762); 
+	}
 
+}
+
+//check for proper paper loaded  
+bool colorTest (){
+	return SensorValue[S2] == (int)colorWhite;
 }
 
 //display message when the graph is finished 
