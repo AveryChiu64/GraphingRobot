@@ -284,7 +284,10 @@ void moveToNextCoord(xyCoord coords ,int yOld){
 //drive to infinity 
 void driveToInfinity(xyCoord coords){	
 	time2[T2] = 0; 
-	while 	
+	while (time2[T2] < 200) 
+	{ 
+		setMotorSpeed (paper, 5.18711*coords.x); 
+		setMotorSpeed (arm, (
 
 }
 
