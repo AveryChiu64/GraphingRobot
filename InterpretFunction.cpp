@@ -140,8 +140,11 @@ int polynomialDegree(int *coefficients, int degree)
 		//Accepts each coefficient of the function and then the constant value c
 		for (int countDegree = degree - 1; countDegree >= 0; countDegree--)
 		{
+			do {
 			cout << "Please enter the coefficient for x^" << countDegree + 1 << endl;
+			cout << "between -5 and 5 inclusive" << endl;
 			cin >> coefficients[countDegree];
+			}while(coefficients[countDegree] < -5 || coefficients[countDegree] > 5 )
 		}
 		cout << "Please enter the constant value c" << endl;
 		cin >> constant;
@@ -244,8 +247,14 @@ void trigonometric()
 			cout << "\t3. tan" << endl;
 			cin >> choice;
 		} while (choice < 1 || choice > 3);
-		cout << "Please enter the coefficient a y=af(x)" << endl;
+
+		do {
+		cout << "please enter the coefficent a for y=af(x)" << endl;
+		cout << "between -5 and 5 inclusive" << endl;
 		cin >> coefficient;
+		}while(coefficient > 5 || coefficient < -5);
+		
+		
 		cout << "Please enter the inner coefficient k for y=f(kx)" << endl;
 		cin >> innerCoefficient;
 		cout << "Please enter the constant c for y=f(x) + c " << endl;
@@ -298,13 +307,16 @@ void processLogarithmic()
 	int base = 0, coefficient = 0, innerCoefficient = 0, constant = 0;
 	do
 	{
-		cout << "please enter the base of logarithmic function: ";
+		cout << "please enter the base of logarithmic function: " << endl;
 		cin >> base;
-		cout << "please enter the coefficent a for y=af(x)";
+		do {
+		cout << "please enter the coefficent a for y=af(x)" << endl;
+		cout << "between -5 and 5 inclusive" << endl;
 		cin >> coefficient;
-		cout << "please enter the inner coefficent k for y=f(kx)";
+		}while(coefficient > 5 || coefficient < -5);
+		cout << "please enter the inner coefficent k for y=f(kx)" << endl;
 		cin >> innerCoefficient;
-		cout << "Please enter the constant c for y=f(x) + c ";
+		cout << "Please enter the constant c for y=f(x) + c " << endl;;
 		cin >> constant;
 
 		//print the function
@@ -331,8 +343,11 @@ void processExponential()
 	{
 		cout << "Please enter the base of the exponential function" << endl;
 		cin >> base;
+		do {
 		cout << "Please enter the coefficient a for the fucntion  y=a(b)^x + c" << endl;
+		cout << "between -5 and 5 inclusive" << endl;
 		cin >> coefficient;
+		}while(coefficient< -5 || coefficient> 5 );
 		cout << "Please enter the constant c for y= (b)^ x + c" << endl;
 		cin >> constant;
 
