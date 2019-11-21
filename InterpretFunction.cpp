@@ -144,7 +144,7 @@ int polynomialDegree(int *coefficients, int degree)
 			cout << "Please enter the coefficient for x^" << countDegree + 1 << endl;
 			cout << "between -5 and 5 inclusive" << endl;
 			cin >> coefficients[countDegree];
-			}while(coefficients[countDegree] < -5 || coefficients[countDegree] > 5 )
+			}while(coefficients[countDegree] < -5 || coefficients[countDegree] > 5 );
 		}
 		cout << "Please enter the constant value c" << endl;
 		cin >> constant;
